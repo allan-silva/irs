@@ -1,0 +1,16 @@
+{
+    "mappings": {
+        "properties": {
+            "id": {
+                "type": "keyword"
+            },
+            "year": {
+                "type": "integer",
+                "ignore_malformed": true
+            },
+            "title": {
+                "type": "wildcard"
+            }
+        }
+    }
+}
