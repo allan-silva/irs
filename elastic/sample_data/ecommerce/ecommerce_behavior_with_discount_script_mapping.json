@@ -55,6 +55,10 @@
             },
             "event_time": {
                 "type": "text"
+            },
+            "data_origin": {
+                "type": "constant_keyword",
+                "value": "kaggle"
             }
         }
     }
