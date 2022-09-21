@@ -8,3 +8,6 @@ class ElasticIndexClient:
 
     def index_doc(self, doc_id, doc):
         self.client.index(index=self.index, document=doc, id=doc_id)
+
+    def bulk(self, docs):
+        self.client.bulk(index=self.index, operations=docs)

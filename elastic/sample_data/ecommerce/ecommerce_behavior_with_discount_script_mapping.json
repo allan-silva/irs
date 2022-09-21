@@ -1,0 +1,61 @@
+{
+    "mappings": {
+        "properties": {
+            "event_type": {
+                "type": "keyword",
+                "ignore_above": 256
+            },
+            "product_id": {
+                "type": "long",
+                "ignore_malformed": true
+            },
+            "category_id": {
+                "type": "keyword",
+                "ignore_above": 256
+            },
+            "category_code": {
+                "type": "keyword"
+            },
+            "brand": {
+                "type": "keyword",
+                "ignore_above": 256
+            },
+            "price": {
+                "type": "double",
+                "ignore_malformed": true
+            },
+            "price_with_discount": {
+                "type": "double",
+                "script": {
+                  "source": """
+                    emit(doc["price"].value * params["discount"]);
+                  """,
+                  "params": {
+                    "discount": 0.93
+                  }
+                }
+            },
+            "discount": {
+                "type": "double",
+                "script": {
+                  "source": """
+                    emit(params["discount"]);
+                  """,
+                  "params": {
+                    "discount": 0.93
+                  }
+                }
+            },
+            "user_id": {
+                "type": "keyword"
+            },
+            "user_session": {
+                "type": "keyword",
+                "ignore_above": 256
+            },
+            "event_time": {
+                "type": "text"
+            }
+        }
+    }
+}
