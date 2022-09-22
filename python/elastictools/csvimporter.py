@@ -33,6 +33,6 @@ def main(argv):
     arguments = parse_args(argv)
     index_client = ElasticIndexClient(arguments.index)
     for line, content in enumerate_csv_dict_line(arguments.csv_file_path):
-        doc_id = content.pop(arguments.id, line)
+        doc_id = content.pop(arguments.id, None)
         index_client.index_doc(doc_id, content)
         print(f"Imported - Line: {line} - Content: {content}")

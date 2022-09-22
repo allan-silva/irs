@@ -1,0 +1,33 @@
+{
+    "mappings": {
+        "properties": {
+            "sourceText": {
+                "type": "text",
+                "fields": {
+                    "en": {
+                        "type": "text",
+                        "analyzer": "english"
+                    },
+                    "es": {
+                        "type": "text",
+                        "analyzer": "spanish"
+                    }
+                }
+            },
+            "perceivedGender": {
+                "type": "keyword"
+            },
+            "entityName": {
+                "type": "text",
+                "fields": {
+                    "key": {
+                        "type": "keyword"
+                    }
+                }
+            },
+            "sourceURL": {
+                "type": "keyword"
+            }
+        }
+    }
+}
