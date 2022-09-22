@@ -1,0 +1,22 @@
+POST wikipedia_en_es/_search
+{
+  "query": {
+    "match": {
+      "entityName": "Margaret"         // Full TEXT Search
+    }
+  },
+  "sort": [
+    {
+      "entityName.key": {
+        "order": "desc"              //Keyword Sort
+      }
+    }
+  ],
+  "aggs": {
+    "person": {
+      "terms": {
+        "field": "entityName.key"  //Keyword aggregation
+      }
+    }
+  }
+}
