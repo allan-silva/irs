@@ -29,5 +29,10 @@
                 "type": "keyword"
             }
         }
+    },
+    "settings": {
+        "index": {
+            "number_of_shards": 3
+        }
     }
 }
