@@ -1,0 +1,12 @@
+{
+    "template": {
+        "mappings": {
+            "properties": {
+                "data_origin": {
+                    "type": "constant_keyword",
+                    "value": "kaggle"
+                }
+            }
+        }
+    }
+}
