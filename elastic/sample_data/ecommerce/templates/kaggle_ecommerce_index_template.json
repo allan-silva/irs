@@ -1,5 +1,11 @@
 {
     "index_patterns": ["kaggle-ecommerce-*"],
+    "priority": 500,
+    "composed_of": ["discount_component_template", "kaggle_component_template"],
+    "version": 3,
+    "_meta": {
+        "description": "Template for ecommerce data from Kaggle."
+    },
     "template": {
         "settings": {
             "number_of_shards": 3
@@ -46,11 +52,5 @@
                 }
             }
         }
-    },
-    "priority": 500,
-    "composed_of": ["discount_component_template", "kaggle_component_template"],
-    "version": 3,
-    "_meta": {
-        "description": "Template for ecommerce data from Kaggle."
     }
 }
