@@ -1,0 +1,8 @@
+{
+    "template": {
+        "settings": {
+            "index.lifecycle.name": "stocks-lifecycle-policy",
+            "number_of_shards": 3
+        }
+    }
+}
