@@ -1,4 +1,8 @@
+PUT _component_template/datastream-mappings-default
 {
+    "_meta": {
+        "description": "default fields for datastreams"
+    },
     "template": {
         "mappings": {
             "properties": {
