@@ -1,11 +1,19 @@
+PUT _index_template/stocks_template
+
+GET _index_template/stocks_template
+
+POST _index_template/_simulate_index/price-stocks-nyse
+
+
 {
-    "index_patterns": ["stocks"],
+    "index_patterns": ["price-stocks-*"],
     "priority": 500,
     "composed_of": ["kaggle_component_template", "stocks-datastreams-settings", "datastream-mappings-default"],
     "version": 1,
     "_meta": {
         "description": "Template for stocks datastream."
     },
+    "data_stream": {},
     "template": {
         "mappings": {
             "properties": {
@@ -54,7 +62,6 @@
                             "type": "double",
                             "ignore_malformed": true
                         }
-
                     }
                 },
                 "high": {
@@ -66,7 +73,6 @@
                             "type": "double",
                             "ignore_malformed": true
                         }
-
                     }
                 },
                 "low": {
