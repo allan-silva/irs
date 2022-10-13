@@ -1,0 +1,15 @@
+./estools.py import ecommerce_behavior ../elastic/sample_data/ecommerce_data.csv
+
+./estools.py import ecommerce_behavior_with_discount ../elastic/sample_data/ecommerce/ecommerce_data.csv
+
+./estools.py import netflix_movie_title ../elastic/sample_data/netflix/movie_titles.csv 
+
+./estools.py import wikipedia_en_es ../elastic/sample_data/wikipedia/EN_ES_wikipedia_dataset.csv 
+
+./estools.py import price-stocks-nyse ../elastic/sample_data/stocks-datastream/stocks.csv
+
+// Data stream
+./estools.py import price-stocks-nyse -ds ../elastic/sample_data/stocks-datastream/stocks.csv
+
+//Index
+./estools.py import price-stocks-nyse ../elastic/sample_data/stocks-datastream/stocks.csv

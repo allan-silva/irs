@@ -1,3 +1,4 @@
+PUT _component_template/stocks-datastreams-settings
 {
     "template": {
         "settings": {
