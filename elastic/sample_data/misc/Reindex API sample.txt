@@ -1,0 +1,53 @@
+DELETE netflix_movie_title
+DELETE netflix_movie_title_keyword_sample
+
+PUT netflix_movie_title
+{
+  "mappings": {
+    "properties": {
+        "title": {
+          "type": "text"
+        }
+    }
+  }
+}
+
+
+PUT netflix_movie_title_keyword_sample
+{
+  "mappings": {
+    "properties": {
+        "title": {
+          "type": "keyword"
+        }
+    }
+  }
+}
+
+POST netflix_movie_title/_doc
+{
+  "title": "The Hitchhiker's Guide to the Galaxy"
+}
+
+
+POST _reindex
+{
+  "source": {
+    "index": "netflix_movie_title"
+  },
+  "dest": {
+    "index": "netflix_movie_title_keyword_sample"
+  }
+}
+
+
+POST netflix_movie_title*/_search
+{
+  "query": {
+    "wildcard": {
+      "title": {
+        "value": "The Hitchhiker's Guide to*"
+      }
+    }
+  }
+}
