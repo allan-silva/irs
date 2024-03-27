@@ -13,6 +13,7 @@ public class PDFFile {
     }
 
     private final PDDocument pdf;
+
     private final String file;
 
     public PDFFile(PDDocument pdf, String file) {
