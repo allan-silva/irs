@@ -3,12 +3,14 @@ package br.dev.contrib.lucenelabs.library;
 import br.dev.contrib.lucenelabs.library.pdf.PDFFile;
 import org.apache.pdfbox.Loader;
 import org.apache.pdfbox.io.RandomAccessReadBuffer;
+import org.apache.pdfbox.text.PDFTextStripper;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 
 import static br.dev.contrib.ResourcesUtils.getResourceFileStream;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class BookTest {
 
@@ -23,6 +25,14 @@ class BookTest {
             assertEquals("Jacob Grimm & Wilhelm Grimm & Maplewood Books", book.getAuthor());
             assertEquals(768, book.getPages().size());
             assertEquals(fileName, book.getFileMetadata().getFileName());
+
+            var stripper = new PDFTextStripper();
+            stripper.setStartPage(3);
+            stripper.setEndPage(3);
+            stripper.setSortByPosition(true);
+
+            var text = stripper.getText(pdf);
+            assertTrue(text.contains("GRIMM'S FAIRY TALES"));
         }
     }
 }
