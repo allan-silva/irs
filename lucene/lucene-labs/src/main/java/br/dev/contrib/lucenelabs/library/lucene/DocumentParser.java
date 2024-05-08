@@ -1,6 +1,7 @@
 package br.dev.contrib.lucenelabs.library.lucene;
 
 import br.dev.contrib.lucenelabs.library.Book;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.lucene.document.*;
 
 import java.util.ArrayList;
@@ -11,28 +12,42 @@ public class DocumentParser {
         var documents = new ArrayList<Document>();
 
         for (var page: book.getPages()) {
-            var document = createEmpty(book.getId());
+            var documentPageId = DigestUtils.sha1Hex(book.getId() + page.getNumber());
+            var document = createEmpty(documentPageId);
 
             // Book single tokens
-            document.add(new StringField(Book.BookFields.AUTHOR, book.getAuthor(), Field.Store.YES));
-            document.add(new StringField(Book.BookFields.TITLE, book.getTitle(), Field.Store.YES));
-            document.add(new StringField(Book.BookFields.SUBJECT, book.getSubject(), Field.Store.NO));
-            document.add(new StringField(Book.BookFields.MetadataFields.FILE_NAME, book.getFileMetadata().getFileName(), Field.Store.YES));
-
-            document.add(new StringField(Book.BookFields.MetadataFields.TOTAL_PAGES, book.getFileMetadata()., Field.Store.YES));
+            addStringField(Book.BookFields.AUTHOR, book.getAuthor(), document, Field.Store.YES);
+            addStringField(Book.BookFields.SUBJECT, book.getSubject(), document, Field.Store.NO);
+            addStringField(Book.BookFields.MetadataFields.FILE_NAME, book.getFileMetadata().getFileName(), document, Field.Store.YES);
+            addStringField(Book.BookFields.MetadataFields.TOTAL_PAGES, String.valueOf(book.getFileMetadata().getTotalPages()), document, Field.Store.YES);
 
             // Book full text search fields
-            document.add(new TextField(Book.BookFields.KEYWORDS, book.getKeywords(), Field.Store.NO));
+            addTextField(Book.BookFields.KEYWORDS, book.getKeywords(), document, Field.Store.NO);
+            addTextField(Book.BookFields.TITLE, book.getTitle(), document, Field.Store.YES);
 
             // Page range tokens
             document.add(new IntPoint(Book.BookFields.PageFields.NUMBER, page.getNumber())); // range is not stored
             document.add(new StoredField(Book.BookFields.PageFields.NUMBER_STORED, page.getNumber())); // Store for retrieval
 
             // Page full text search
-            document.add(new TextField(Book.BookFields.PageFields.CONTENT, page.getContent(), Field.Store.YES));
+            addTextField(Book.BookFields.PageFields.CONTENT, page.getContent(), document, Field.Store.YES);
+
+            documents.add(document);
         }
 
         return documents;
+    }
+
+    private void addStringField(String name, String value, Document document, Field.Store store) {
+        if (value != null) {
+            document.add(new StringField(name, value, store));
+        }
+    }
+
+    private void addTextField(String name, String value, Document document, Field.Store store) {
+        if (value != null) {
+            document.add(new TextField(name, value, store));
+        }
     }
 
     private Document createEmpty(String id) {

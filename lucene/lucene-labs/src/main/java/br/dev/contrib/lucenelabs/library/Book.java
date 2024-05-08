@@ -1,6 +1,7 @@
 package br.dev.contrib.lucenelabs.library;
 
 import br.dev.contrib.lucenelabs.library.pdf.PDFFile;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.pdfbox.text.PDFTextStripper;
 
 import java.io.IOException;
@@ -97,6 +98,10 @@ public class Book {
             this.totalPages = totalPages;
         }
 
+        public int getTotalPages() {
+            return totalPages;
+        }
+
         public String getFileName() {
             return fileName;
         }
@@ -128,7 +133,7 @@ public class Book {
                 pdfDocumentInformation.getKeywords(),
                 pdfDocumentInformation.getSubject()
         );
-        book.setId(UUID.randomUUID().toString());
+        book.setId(DigestUtils.sha1Hex(pdfFile.getFile()));
         book.setPages(pages);
         book.setFileMetadata(new FileMetadata(pdfFile.getFile(), numberOfPages));
 
@@ -136,6 +141,9 @@ public class Book {
     }
 
     public static class BookFields {
+
+        public static final  String DEFAULT = PageFields.CONTENT;
+
         public static final String ID = "id";
 
         public static final String TITLE = "title";
