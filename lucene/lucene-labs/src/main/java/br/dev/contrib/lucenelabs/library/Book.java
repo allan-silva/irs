@@ -6,8 +6,11 @@ import org.apache.pdfbox.text.PDFTextStripper;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class Book {
+
+    private String id;
 
     private String title;
 
@@ -20,6 +23,14 @@ public class Book {
     private FileMetadata fileMetadata;
 
     private List<BookPage> pages;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public String getTitle() {
         return title;
@@ -81,15 +92,18 @@ public class Book {
     }
 
     public static class FileMetadata {
-        public FileMetadata(String fileName) {
+        public FileMetadata(String fileName, int totalPages) {
             this.fileName = fileName;
+            this.totalPages = totalPages;
         }
 
         public String getFileName() {
             return fileName;
         }
 
-        private String fileName;
+        private final String fileName;
+
+        private final int totalPages;
     }
 
     public static Book from(PDFFile pdfFile) throws IOException {
@@ -114,9 +128,41 @@ public class Book {
                 pdfDocumentInformation.getKeywords(),
                 pdfDocumentInformation.getSubject()
         );
+        book.setId(UUID.randomUUID().toString());
         book.setPages(pages);
-        book.setFileMetadata(new FileMetadata(pdfFile.getFile()));
+        book.setFileMetadata(new FileMetadata(pdfFile.getFile(), numberOfPages));
 
         return book;
+    }
+
+    public static class BookFields {
+        public static final String ID = "id";
+
+        public static final String TITLE = "title";
+
+        public static final String AUTHOR = "author";
+
+        public static final String KEYWORDS = "keywords";
+
+        public static final String SUBJECT = "subject";
+
+        public static class PageFields {
+
+            public static final String PATH = "page";
+
+            public static final String NUMBER = PATH + ".number";
+
+            public static final String NUMBER_STORED = NUMBER + ".stored";
+
+            public static final String CONTENT = PATH + ".content";
+        }
+
+        public static class MetadataFields {
+            public static final String PATH = "page";
+
+            public static final String FILE_NAME = PATH + ".filename";
+
+            public static final String TOTAL_PAGES = PATH + ".totalpages";
+        }
     }
 }
