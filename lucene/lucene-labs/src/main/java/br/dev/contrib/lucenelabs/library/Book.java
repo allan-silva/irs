@@ -5,6 +5,7 @@ import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.pdfbox.text.PDFTextStripper;
 
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -127,13 +128,17 @@ public class Book {
             pages.add(bookPage);
         }
 
+        var fileName = Path.of(pdfFile.getFile()).getFileName().toString();
+        var bookTitle = pdfDocumentInformation.getTitle() != null ?
+                pdfDocumentInformation.getTitle() :  fileName;
+
         var book = new Book(
-                pdfDocumentInformation.getTitle(),
+                bookTitle,
                 pdfDocumentInformation.getAuthor(),
                 pdfDocumentInformation.getKeywords(),
                 pdfDocumentInformation.getSubject()
         );
-        book.setId(DigestUtils.sha1Hex(pdfFile.getFile()));
+        book.setId(DigestUtils.sha1Hex(fileName));
         book.setPages(pages);
         book.setFileMetadata(new FileMetadata(pdfFile.getFile(), numberOfPages));
 

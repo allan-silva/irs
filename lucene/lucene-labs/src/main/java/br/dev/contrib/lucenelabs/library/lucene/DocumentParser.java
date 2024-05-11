@@ -3,6 +3,7 @@ package br.dev.contrib.lucenelabs.library.lucene;
 import br.dev.contrib.lucenelabs.library.Book;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.lucene.document.*;
+import org.apache.lucene.util.BytesRef;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,12 +26,17 @@ public class DocumentParser {
             addTextField(Book.BookFields.KEYWORDS, book.getKeywords(), document, Field.Store.NO);
             addTextField(Book.BookFields.TITLE, book.getTitle(), document, Field.Store.YES);
 
-            // Page range tokens
+            // Page range fields
             document.add(new IntPoint(Book.BookFields.PageFields.NUMBER, page.getNumber())); // range is not stored
             document.add(new StoredField(Book.BookFields.PageFields.NUMBER_STORED, page.getNumber())); // Store for retrieval
 
             // Page full text search
             addTextField(Book.BookFields.PageFields.CONTENT, page.getContent(), document, Field.Store.YES);
+
+            // Store fields for sorting, aggregations and others.
+            // This is necessary because Lucene stores it in a columnar fashion, in another file other than inverted index.
+            document.add(new SortedDocValuesField(Book.BookFields.TITLE, new BytesRef(book.getTitle())));
+            document.add(new SortedNumericDocValuesField(Book.BookFields.PageFields.NUMBER, page.getNumber()));
 
             documents.add(document);
         }

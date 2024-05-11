@@ -9,6 +9,9 @@ import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.queryparser.classic.ParseException;
 import org.apache.lucene.search.IndexSearcher;
+import org.apache.lucene.search.Sort;
+import org.apache.lucene.search.SortField;
+import org.apache.lucene.search.SortedNumericSortField;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.queryparser.classic.QueryParser;
 
@@ -44,7 +47,10 @@ public class BookSearcher {
         var queryParser = new QueryParser(Book.BookFields.DEFAULT, analyzer);
         var query = queryParser.parse(queryString);
 
-        var topDocs = indexSearcher.search(query, 1000);
+        var sort = new Sort(new SortField(Book.BookFields.TITLE, SortField.Type.STRING),
+                new SortedNumericSortField(Book.BookFields.PageFields.NUMBER, SortField.Type.INT));
+
+        var topDocs = indexSearcher.search(query, 1000, sort, true);
 
         System.out.printf("Documents matched: %s, relation: %s\n", topDocs.totalHits.value, topDocs.totalHits.relation.name());
 
@@ -54,6 +60,7 @@ public class BookSearcher {
 
             System.out.println();
             System.out.println("-> Matched book: " + doc.get(Book.BookFields.TITLE));
+            System.out.println("-> Score: " + scoreDoc.score);
             System.out.println("-- File: " + doc.get(Book.BookFields.MetadataFields.FILE_NAME));
             System.out.println("-- Page: " + doc.get(Book.BookFields.PageFields.NUMBER_STORED));
             System.out.println();
