@@ -5,7 +5,6 @@ import br.dev.contrib.lucenelabs.library.lucene.BookIndexer;
 import br.dev.contrib.lucenelabs.library.lucene.BookSearcher;
 import br.dev.contrib.lucenelabs.library.lucene.DocumentParser;
 import br.dev.contrib.lucenelabs.library.pdf.DirectoryIterator;
-import org.apache.commons.lang3.NotImplementedException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.lucene.queryparser.classic.ParseException;
@@ -83,6 +82,6 @@ public class LibraryApp
     }
 
     private void search(String query) throws ParseException, IOException {
-        bookSearcher.search(query);
+        bookSearcher.queryStringSearch(query);
     }
 }

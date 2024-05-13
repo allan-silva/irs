@@ -6,6 +6,7 @@ import org.apache.commons.lang3.time.StopWatch;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
+import org.apache.lucene.codecs.simpletext.SimpleTextCodec;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
@@ -35,6 +36,7 @@ public class BookIndexer {
 
     public BookIndexer(Path indexPath, DocumentParser documentParser) throws IOException {
         var indexConfig = new IndexWriterConfig(new StandardAnalyzer());
+        indexConfig.setCodec(new SimpleTextCodec());
         Directory directory = FSDirectory.open(indexPath);
         indexWriter = new IndexWriter(directory, indexConfig);
         stopWatch = StopWatch.createStarted();
@@ -56,8 +58,8 @@ public class BookIndexer {
 
     private void addDocuments() throws IOException {
         for(var document : documentsBuffer){
-            var documentId = document.get(Book.BookFields.ID);
-            var segment = indexWriter.updateDocument(new Term(Book.BookFields.ID, documentId), document);
+            var documentId = document.get(Book.BookFields.PageFields.ID);
+            var segment = indexWriter.updateDocument(new Term(Book.BookFields.PageFields.ID, documentId), document);
             logger.info("Add or update document: {}, sequence operation number: {}", documentId, segment);
         }
 

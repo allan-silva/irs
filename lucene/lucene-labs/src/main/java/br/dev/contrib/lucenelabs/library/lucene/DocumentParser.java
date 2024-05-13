@@ -3,6 +3,7 @@ package br.dev.contrib.lucenelabs.library.lucene;
 import br.dev.contrib.lucenelabs.library.Book;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.lucene.document.*;
+import org.apache.lucene.index.IndexOptions;
 import org.apache.lucene.util.BytesRef;
 
 import java.util.ArrayList;
@@ -30,8 +31,8 @@ public class DocumentParser {
             document.add(new IntPoint(Book.BookFields.PageFields.NUMBER, page.getNumber())); // range is not stored
             document.add(new StoredField(Book.BookFields.PageFields.NUMBER_STORED, page.getNumber())); // Store for retrieval
 
-            // Page full text search
-            addTextField(Book.BookFields.PageFields.CONTENT, page.getContent(), document, Field.Store.YES);
+            // Page full text search, with term vector offsets enabled.
+            addTextWithOffsetsEnabled(Book.BookFields.PageFields.CONTENT, page.getContent(), document, Field.Store.YES);
 
             // Store fields for sorting, aggregations and others.
             // This is necessary because Lucene stores it in a columnar fashion, in another file other than inverted index.
@@ -56,9 +57,20 @@ public class DocumentParser {
         }
     }
 
+    private void addTextWithOffsetsEnabled(String name, String value, Document document, Field.Store store) {
+        if (value != null) {
+            var fieldType = new FieldType(store == Field.Store.YES ? TextField.TYPE_STORED : TextField.TYPE_NOT_STORED);
+            fieldType.setIndexOptions(IndexOptions.DOCS_AND_FREQS_AND_POSITIONS_AND_OFFSETS);
+            fieldType.setStoreTermVectors(true);
+            fieldType.setStoreTermVectorOffsets(true);
+            var field = new Field(name, value, fieldType);
+            document.add(field);
+        }
+    }
+
     private Document createEmpty(String id) {
         var document = new Document();
-        document.add(new StringField(Book.BookFields.ID, id, Field.Store.YES));
+        document.add(new StringField(Book.BookFields.PageFields.ID, id, Field.Store.YES));
         return document;
     }
 }

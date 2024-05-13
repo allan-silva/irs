@@ -149,8 +149,6 @@ public class Book {
 
         public static final  String DEFAULT = PageFields.CONTENT;
 
-        public static final String ID = "id";
-
         public static final String TITLE = "title";
 
         public static final String AUTHOR = "author";
@@ -160,6 +158,7 @@ public class Book {
         public static final String SUBJECT = "subject";
 
         public static class PageFields {
+            public static final String ID = "id";
 
             public static final String PATH = "page";
 
