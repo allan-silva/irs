@@ -81,12 +81,6 @@ public class BookSearcher {
         for (int i = 0; i < topDocs.scoreDocs.length; ++i) {
             var scoreDoc = topDocs.scoreDocs[i];
             var doc = indexSearcher.doc(scoreDoc.doc);
-//            var termsV = indexSearcher.getIndexReader().getTermVector(scoreDoc.doc, Book.BookFields.PageFields.CONTENT);
-//
-//            TermsEnum te = termsV.iterator();
-//
-//            BytesRef br = new BytesRef(searchTerm);
-//            te.seekExact(br);
 
             System.out.println();
             System.out.println("-> Matched book: " + doc.get(Book.BookFields.TITLE));
